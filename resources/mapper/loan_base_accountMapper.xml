@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.hao.dao.ILoanBaseDao" >
+
+	<sql id="Base_Column_List">
+		loan_no ,
+		contract ,
+		cmisloan_no ,
+		loan_type ,
+		cb_status_change ,
+		borrower ,
+		book_branch ,
+		start_date ,
+		mature_date ,
+		ccy ,
+		loan_amt ,
+		outstanding ,
+		os_less_past_due ,
+		repay_mode ,
+		int_rate ,
+		pri_penalty ,
+		int_penalty ,
+		od_pri_penalty ,
+		od_int_penalty ,
+		pri_plty_rate ,
+		int_plty_rate ,
+		int_appl_type ,
+		roll_freq ,
+		roll_date ,
+		int_repay_freq ,
+		last_int_rep_date,
+		next_int_rep_date ,
+		next_pri_rep_date ,
+		reversed_matured ,
+		write_off ,
+		write_off_date ,
+		auto_rec_gen ,
+		base_acct_no_auto ,
+		acct_exec ,
+		user_id ,
+		int_repay_day ,
+		stage_amt ,
+		stage_capital ,
+		stage_inter ,
+		undo_amt ,
+		undo_capital ,
+		undo_inter ,
+		pay_off_date
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="bean != null and bean.loan_no != null and bean.loan_no != ''">
+				and loan_no = #{bean.loan_no}
+			</if>
+			<if test="bean != null and bean.contract != null and bean.contract != ''">
+				and contract = #{bean.contract}
+			</if>
+			<if test="bean != null and bean.cmisloan_no != null and bean.cmisloan_no != ''">
+				and cmisloan_no = #{bean.cmisloan_no}
+			</if>
+			<if test="bean != null and bean.acct_name != null and bean.acct_name != ''">
+				and acct_name like '%'||#{bean.acct_name} ||'%'
+			</if>
+			<if test="bean != null and bean.borrower != null and bean.borrower != ''">
+				and borrower = #{bean.borrower}
+			</if>
+			<if test="bean != null and bean.book_branch != null and bean.book_branch != ''">
+				and book_branch = #{bean.book_branch}
+			</if>
+			<if test="bean != null and bean.start_date != null and bean.start_date != ''">
+				and start_date = #{bean.start_date}
+			</if>
+			<if test="bean != null and bean.mature_date != null and bean.mature_date != ''">
+				and mature_date = #{bean.mature_date}
+			</if>
+			<if test="bean != null and bean.acct_exec != null and bean.acct_exec != ''">
+				and acct_exec = #{bean.acct_exec}
+			</if>
+			<if test="bean != null and bean.pay_off_date != null and bean.pay_off_date != ''">
+				and pay_off_date = #{bean.pay_off_date}
+			</if>
+			<if test="bean != null and bean.int_repay_day != null and bean.int_repay_day != ''">
+				and int_repay_day = #{bean.int_repay_day}
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="com.founder.hao.entity.LoanBaseAccount">
+	insert into loan_base_account values (
+		#{ cust_id },
+		#{ cert_type },
+		#{ cert_no },
+		#{ govn_cert_no },
+		#{ company_no },
+		#{ party_name },
+		#{ cert_hld_date },
+		#{ cert_end_date },
+		#{ cust_type },
+		#{ cust_en_name },
+		#{ agent_cust_name },
+		#{ agent_paper_type },
+		#{ agent_paper_no },
+		#{ is_bas_cust },
+		#{ bssav_acc_no },
+		#{ bsopen_acc_no },
+		#{ bas_open_permit_no},
+		#{ acct_lic_no },
+		#{ open_acc_no },
+		#{ rm_team_no },
+		#{ cust_status },
+		#{ addr_type },
+		#{ post_cd },
+		#{ nation },
+		#{ province },
+		#{ city },
+		#{ country },
+		#{ addr_line },
+		#{ area_no },
+		#{ phone_no },
+		#{ ext_no },
+		#{ fax_no },
+		#{ mobile_no },
+		#{ email_addr },
+		#{ web_sit })
+	</insert>
+
+	<!-- 根据ID删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from loan_base_account where loan_no = #{ loan_no }
+	</delete>
+
+	<!-- 根据几个条件分页查询 -->
+	<select id="queryListByPage" resultType="com.founder.hao.entity.LoanBaseAccount" parameterType="Object">
+		select 
+		<include refid="Base_Column_List" />
+		from loan_base_account
+		<include refid="Example_Where_Clause" />
+		limit #{begin},#{pageSize}
+	</select>
+
+	<!-- 根据几个条件查询数目 -->
+	<select id="queryCountByPage" resultType="java.lang.Integer" parameterType="Object">
+		select count(*)  from loan_base_account
+		<include refid="Example_Where_Clause" />
+	</select>
+
+
+</mapper>   

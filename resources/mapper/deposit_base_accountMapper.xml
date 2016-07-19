@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.hao.dao.IDepositBaseDao" >
+
+	<!-- deposit_base_account table all fields -->
+	<sql id="Base_Column_List">
+		base_acct_no ,
+		open_bank_no ,
+		acct_no ,
+		ccy ,
+		cust_id ,
+		acct_status ,
+		acct_type ,
+		doc_type ,
+		voucher_no ,
+		withdrawal_type ,
+		acct_open_date ,
+		acct_close_date ,
+		user_id ,
+		officer_id ,
+		status_chg_date ,
+		last_tran_date ,
+		actual_bal ,
+		agg_bal ,
+		cr_acct_level_int_rate ,
+		cr_spread_rate ,
+		acct_name,
+		deposit_term ,
+		cr_third_party_acct ,
+		maturity_date
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="bean != null and bean.base_acct_no != null and bean.base_acct_no != ''">
+				and base_acct_no = #{bean.base_acct_no}
+			</if>
+			<if test="bean != null and bean.open_bank_no != null and bean.open_bank_no != ''">
+				and open_bank_no = #{bean.open_bank_no}
+			</if>
+			<if test="bean != null and bean.acct_no != null and bean.acct_no != ''">
+				and acct_no = #{bean.acct_no}
+			</if>
+			<if test="bean != null and bean.acct_name != null and bean.acct_name != ''">
+				and acct_name like '%'||#{bean.acct_name} ||'%'
+			</if>
+			<if test="bean != null and bean.cust_id != null and bean.cust_id != ''">
+				and cust_id = #{bean.cust_id}
+			</if>
+			<if test="bean != null and bean.voucher_no != null and bean.voucher_no != ''">
+				and voucher_no = #{bean.voucher_no}
+			</if>
+			<if test="bean != null and bean.acct_open_date != null and bean.acct_open_date != ''">
+				and acct_open_date = #{bean.acct_open_date}
+			</if>
+			<if test="bean != null and bean.officer_id != null and bean.officer_id != ''">
+				and officer_id = #{bean.officer_id}
+			</if>
+			<if test="bean != null and bean.maturity_date != null and bean.maturity_date != ''">
+				and maturity_date = #{bean.maturity_date}
+			</if>
+			and acct_status = 'A'
+		</trim>
+	</sql>
+
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="com.founder.hao.entity.DepositBaseAccount">
+	insert into deposit_base_account values (
+		#{ base_acct_no } ,
+		#{ open_bank_no },
+		#{ acct_no },
+		#{ ccy },
+		#{ cust_id },
+		#{ acct_status },
+		#{ acct_type },
+		#{ doc_type },
+		#{ voucher_no },
+		#{ withdrawal_type },
+		#{ acct_open_date },
+		#{ acct_close_date },
+		#{ user_id },
+		#{ officer_id },
+		#{ status_chg_date },
+		#{ last_tran_date },
+		#{ actual_bal },
+		#{ agg_bal },
+		#{ cr_acct_level_int_rate },
+		#{ cr_spread_rate },
+		#{ acct_name },
+		#{ deposit_term },
+		#{ cr_third_party_acct },
+		#{ maturity_date })
+	</insert>
+
+	<!-- 根据ID删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from deposit_base_account where acct_no = #{acct_no}
+	</delete>
+
+	<!-- 根据几个条件分页查询 -->
+	<select id="queryListByPage" resultType="java.util.HashMap" parameterType="Object">
+		select 
+		<include refid="Base_Column_List" />
+		from deposit_base_account
+		<include refid="Example_Where_Clause" />
+		limit #{begin},#{pageSize}
+	</select>
+
+	<!-- 根据几个条件查询数目 -->
+	<select id="queryCountByPage" resultType="java.lang.Integer" parameterType="Object">
+		select count(*)  from deposit_base_account
+		<include refid="Example_Where_Clause" />
+	</select>
+
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.hao.dao.IDepositAcntDao" >
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="bean != null and bean.zhh != null and bean.zhh != ''">
+				and zhh = #{bean.zhh}
+			</if>
+			<if test="bean != null and bean.zhzh != null and bean.zhzh != ''">
+				and zhzh = #{bean.zhzh}
+			</if>
+			<if test="bean != null and bean.khh != null and bean.khh != ''">
+				and khh = #{bean.khh}
+			</if>
+			<if test="bean != null and bean.zhmc != null and bean.zhmc!=''">
+				and zhmc like '%'||#{bean.zhmc} ||'%'
+			</if>
+			<if test="bean != null and bean.pzhm != null and bean.pzhm != ''">
+				and pzhm = #{bean.pzhm}
+			</if>
+			<if test="bean != null and bean.hzjbh != null and bean.hzjbh != ''">
+				and hzjbh = #{bean.hzjbh}
+			</if>
+		</trim>
+	</sql>
+
+
+	<!-- 插入记录 -->
+	<insert id="insert" parameterType="Object">
+		insert into DATA_DEPOSIT_ACCOUNT 
+		values (
+		#{ zzh       },
+		#{ khhh	}, 
+		#{ zhzh	}, 
+		#{ zhbz	}, 
+		#{ khh	      },
+		#{ zhzt	}, 
+		#{ zhlx	}, 
+		#{ zhsx	}, 
+		#{ pzlx	}, 
+		#{ pzqz	}, 
+		#{ pzhm	}, 
+		#{ zqfs	}, 
+		#{ khrq	}, 
+		#{ xhrq	}, 
+		#{ gyid	}, 
+		#{ khjlid	}, 
+		#{ zhztxgrq  },
+		#{ scjyrq	}, 
+		#{ zhcye	}, 
+		#{ zhhye	}, 
+		#{ zhjs	}, 
+		#{ dfzhjcllv },
+		#{ dfzhkzllv },
+		#{ jtrdfyflx },
+		#{ dfyflxjsz },
+		#{ llbdrlxtz },
+		#{ dflxtzjsz },
+		#{ gdje	}, 
+		#{ zhmc	}, 
+		#{ hzjbh	}, 
+		#{ tcbz	}, 
+		#{ tdbz	}, 
+		#{ xdckbz	}, 
+		#{ kssj	}, 
+		#{ dqykhcrrq },
+		#{ ckqx	}, 
+		#{ ckqxlx	}, 
+		#{ zdzc	}, 
+		#{ drlx	}, 
+		#{ drllv	}, 
+		#{ yskhrq	}, 
+		#{ zhxkzh	}, 
+		#{ yhtzzhbz  },
+		#{ yhtzzhjxbz},
+		#{ lxrzzh	}, 
+		#{ dqr	      },
+		#{ dfgzbj	}, 
+		#{ yhbz	} )
+	</insert>
+
+
+	<!-- 根据客户号删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from DATA_DEPOSIT_ACCOUNT where khh = #{khh}
+	</delete>
+
+
+	<!-- 根据客户号查询 -->
+	<select id="queryByKhh" parameterType="Object" resultType="com.founder.hao.data.DepositAccount">
+		select * from DATA_DEPOSIT_ACCOUNT where khh = #{khh}
+	</select>
+
+
+	<!-- 根据几个条件分页查询 -->
+	<select id="queryListByPage" resultType="com.founder.hao.data.DepositAccount" parameterType="Object">
+		select * from DATA_DEPOSIT_ACCOUNT
+		<include refid="Example_Where_Clause" />
+		limit #{begin},#{pageSize}
+	</select>
+
+
+	<!-- 根据几个条件查询数目 -->
+	<select id="queryCountByPage" resultType="java.lang.Integer" parameterType="Object">
+		select count(*)  from DATA_DEPOSIT_ACCOUNT
+		<include refid="Example_Where_Clause" />
+	</select>
+
+
+</mapper>   

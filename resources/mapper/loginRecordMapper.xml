@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.hao.dao.ILoginRecordDao" >
+
+	<resultMap id="BaseResultMap" type="com.founder.hao.entity.LoginRecord">
+		<id column="RECORD_ID" property="recordId" />
+		<result column="USER_ID" property="loginUserId" />
+		<result column="LOGIN_TIME" property="loginTime" />
+		<result column="LOGIN_IP" property="loginIP" />
+		<result column="LOGIN_DEVICE" property="loginDevice" />
+		<result column="LOGIN_CODE" property="loginCode" />
+		<result column="LOGIN_STATUS" property="loginStatus" />
+	</resultMap>
+
+	<!-- SYS_LOGIN_RECORD table all fields -->
+	<sql id="Base_Column_List">
+		RECORD_ID,USER_ID,LOGIN_TIME,LOGIN_IP,LOGIN_DEVICE,LOGIN_CODE,LOGIN_STATUS
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="recordId != null and recordId != ''">
+				and RECORD_ID = #{recordId}
+			</if>
+			<if test="loginUserId != null and loginUserId != ''">
+				and USER_ID = #{loginUserId}
+			</if>
+			<if test="loginTime != null and loginTime != ''">
+				and LOGIN_TIME = #{loginTime}
+			</if>
+			<if test="loginIP != null">
+				and LOGIN_IP = #{loginIP}
+			</if>
+			<if test="loginDevice != null">
+				and LOGIN_DEVICE = #{loginDevice}
+			</if>
+			<if test="loginCode != null">
+				and LOGIN_CODE = #{loginCode}
+			</if>
+			<if test="loginStatus != null">
+				and LOGIN_STATUS = #{loginStatus}
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insertLoginRecord" parameterType="com.founder.hao.entity.LoginRecord" useGeneratedKeys="true" keyProperty="recordId">
+		insert into
+		SYS_LOGIN_RECORD (USER_ID,LOGIN_IP,LOGIN_DEVICE,LOGIN_CODE,LOGIN_STATUS) 
+		values(#{loginUserId},#{loginIP},#{loginDevice},#{loginCode},#{loginStatus})
+	</insert>
+
+	<!-- 获取注册记录 -->
+	<select id="getRegisterRecord" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" /> 
+		from SYS_LOGIN_RECORD 
+		where USER_ID=#{userid} and LOGIN_CODE='0' order by LOGIN_TIME limit 0,1;
+	</select>
+
+	<!-- 获取最后一次登录记录 -->
+	<select id="getLastLoginRecord" parameterType="java.lang.Integer" resultMap="BaseResultMap" >
+		select 
+		<include refid="Base_Column_List" /> 
+		from SYS_LOGIN_RECORD 
+		where USER_ID=#{userid} and LOGIN_CODE='0' order by LOGIN_TIME aesc limit 0,1;
+	</select>
+
+	<!-- 在2分钟内密码错误(3)次数后，5分钟内不能登录，即SUM(LOGIN_CODE)>=3时不能登陆 -->
+	<select id="getFaltTimes" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+		select IFNULL(SUM(LOGIN_CODE),0)  
+		from SYS_LOGIN_RECORD 
+		where USER_ID=#{userid} and LOGIN_CODE='1' and LOGIN_TIME >= date_sub(now(),interval 2+5  minute)
+	</select>
+
+</mapper>   

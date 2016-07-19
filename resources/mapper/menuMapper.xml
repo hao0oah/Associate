@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.hao.dao.IMenuDao" >
+
+	<resultMap id="BaseResultMap" type="com.founder.hao.entity.Menu">
+		<id column="MENU_ID" property="menuId" />
+		<result column="MENU_NAME" property="menuName" />
+		<result column="MENU_URL" property="menuUrl" />
+		<result column="MENU_PARENT_ID" property="menuParentId" />
+		<result column="MENU_ORDER" property="menuOrder" />
+		<result column="MENU_ICON" property="menuIcon" />
+		<result column="MENU_TYPE" property="menuType" />
+		<result column="MENU_TARGET" property="menuTarget" />
+		<result column="MENU_CSS" property="menuCss" />
+		<result column="MENU_LEVEL" property="menuLevel" />
+	</resultMap>
+
+	<!-- SYS_MENU table all fields -->
+	<sql id="Base_Column_List">
+		MENU_ID,MENU_NAME,MENU_URL,MENU_PARENT_ID,MENU_ORDER,MENU_ICON,MENU_TYPE,MENU_TARGET,MENU_CSS,MENU_LEVEL
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insertMenu" parameterType="com.founder.hao.entity.Menu" useGeneratedKeys="true" keyProperty="menuId">
+		insert into
+		SYS_MENU (MENU_NAME,MENU_URL,MENU_PARENT_ID,MENU_ORDER,MENU_ICON,MENU_TYPE,MENU_TARGET,MENU_CSS,MENU_LEVEL) 
+		values (#{menuName},#{menuUrl},#{menuParentId},#{menuOrder},#{menuIcon},#{menuType},#{menuTarget},#{menuCss},#{menuLevel})
+	</insert>
+
+	<!-- 根据ID修改记录 -->
+	<update id="updateMenu" parameterType="com.founder.hao.entity.Menu">
+		update SYS_MENU set 
+		MENU_NAME=#{menuName},MENU_URL=#{menuUrl},MENU_PARENT_ID=#{menuParentId},MENU_ORDER=#{menuOrder},MENU_ICON=#{menuIcon},MENU_TYPE=#{menuType},MENU_TARGET=#{menuTarget},MENU_CSS=#{menuCss},MENU_LEVEL=#{menuLevel} 
+		where Menu_ID=#{MenuId}
+	</update>
+
+	<!-- 根据ID删除记录 -->
+	<delete id="deleteMenu" parameterType="com.founder.hao.entity.Menu">
+		delete from SYS_MENU where Menu_ID = #{MenuId}
+	</delete>
+
+	<!-- 根据用户ID查询所拥有的菜单 -->
+	<select id="getMenuByUserId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 
+		<include refid="Base_Column_List" />
+		from SYS_MENU where MENU_ID in(
+			select DISTINCT MENU_ID from SYS_ROLE_MENU where ROLE_ID in(
+				select ROLE_ID from SYS_USER_ROLE where USER_ID=#{userId}
+			)
+		) order by MENU_LEVEL,MENU_PARENT_ID,MENU_ORDER
+	</select>
+
+</mapper>   

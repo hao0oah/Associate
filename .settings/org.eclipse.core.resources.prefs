@@ -1,0 +1,17 @@
+#Wed Jun 01 15:21:36 CST 2016
+eclipse.preferences.version=1
+encoding//WebRoot/login.jsp=UTF-8
+encoding//WebRoot/page/Deposit_Manage/DepositorDetail.jsp=UTF-8
+encoding//WebRoot/page/Deposit_Manage/DepositorQuery.jsp=UTF-8
+encoding//WebRoot/page/Person_Manage/ChangePwd.jsp=UTF-8
+encoding//WebRoot/page/Person_Manage/PersonMsgManage.jsp=UTF-8
+encoding//WebRoot/page/System_Manage/SysMenu.jsp=GBK
+encoding//WebRoot/page/bottom.jsp=UTF-8
+encoding//WebRoot/page/left.jsp=UTF-8
+encoding//WebRoot/page/right.jsp=UTF-8
+encoding//WebRoot/page/top.jsp=UTF-8
+encoding//src/com/founder/base/util/DateUtil.java=UTF-8
+encoding//src/com/founder/hao/entity/Role.java=UTF-8
+encoding/<project>=UTF-8
+encoding/resources=UTF-8
+encoding/src=UTF-8

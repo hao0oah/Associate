@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd "
+	version="3.0">
+
+	<display-name>Associate</display-name>
+
+	<!-- characterEncoding -->
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<!-- cors -->
+	<filter>
+		<filter-name>corsFilter</filter-name>
+		<filter-class>com.founder.bank.filter.CorsFilter</filter-class>
+	</filter>
+	<!-- webroot path -->
+	<filter>
+		<filter-name>webRootPathFilter</filter-name>
+		<filter-class>com.founder.bank.filter.WebRootPathFilter</filter-class>
+	</filter>
+	<!-- spring security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>corsFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>webRootPathFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- log4j的配置 -->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:config/common/log4j.properties</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	<!-- 自动对账服务端口 -->
+  	<context-param>
+    	<param-name>socketPort</param-name>
+    	<param-value>12580</param-value>
+  	</context-param>
+  	<!-- 指纹登录对外服务端口 -->
+  	<context-param>
+		<param-name>fingerPort</param-name>
+    	<param-value>12581</param-value>
+  	</context-param>
+  	
+	<listener>
+		<listener-class>com.founder.socket.SocketServiceLoader</listener-class>
+	</listener>  	
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- 监听session创建和销毁 -->
+	<listener>
+		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:config/datasource/datasource.xml
+			classpath:config/datasource/mybatis-mapper.xml
+			classpath:config/spring/spring.xml
+			classpath:config/spring/spring-security.xml
+		</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>webRootKey</param-name>
+		<param-value>ccbPaymentWebRoot</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>baodingBank</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>
+				classpath:config/spring/bank-servlet.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>baodingBank</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<mime-mapping>
+		<extension>html</extension>
+		<mime-type>text/html;charset=UTF-8</mime-type>
+	</mime-mapping>
+
+	<welcome-file-list>
+		<welcome-file>/login</welcome-file>
+	</welcome-file-list>
+</web-app>

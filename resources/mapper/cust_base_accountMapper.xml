@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.hao.dao.ICustBaseDao" >
+
+	<sql id="Base_Column_List">
+		cust_id ,
+		cert_type ,
+		cert_no ,
+		govn_cert_no ,
+		company_no ,
+		party_name ,
+		cert_hld_date ,
+		cert_end_date ,
+		cust_type ,
+		cust_en_name ,
+		agent_cust_name ,
+		agent_paper_type ,
+		agent_paper_no ,
+		is_bas_cust ,
+		bssav_acc_no ,
+		bsopen_acc_no ,
+		bas_open_permit_no ,
+		acct_lic_no ,
+		open_acc_no ,
+		rm_team_no ,
+		cust_status ,
+		addr_type ,
+		post_cd ,
+		nation ,
+		province ,
+		city ,
+		country ,
+		addr_line ,
+		area_no ,
+		phone_no ,
+		ext_no ,
+		fax_no ,
+		mobile_no ,
+		email_addr ,
+		web_sit 
+	</sql>
+	
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="bean != null and bean.cust_id != null and bean.cust_id != ''">
+				and cust_id like '%'||#{bean.cust_id} ||'%'
+			</if>
+			<if test="bean != null and bean.cert_no != null and bean.cert_no != ''">
+				and cert_no like '%'||#{bean.cert_no} ||'%'
+			</if>
+			<if test="bean != null and bean.open_acc_no != null and bean.open_acc_no != ''">
+				and open_acc_no like '%'||#{bean.open_acc_no} ||'%'
+			</if>
+			<if test="bean != null and bean.party_name != null and bean.party_name != ''">
+				and party_name like '%'||#{bean.party_name} ||'%'
+			</if>
+			<if test="bean != null and bean.rm_team_no != null and bean.rm_team_no != ''">
+				and rm_team_no like '%'||#{bean.rm_team_no} ||'%'
+			</if>
+			<if test="bean != null and bean.bssav_acc_no != null and bean.bssav_acc_no != ''">
+				and bssav_acc_no like '%'||#{bean.bssav_acc_no} ||'%'
+			</if>
+			and cust_status = 0
+		</trim>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="add" parameterType="Object">
+		insert into cust_base_account values (
+			#{ cust_id },
+			#{ cert_type },
+			#{ cert_no },
+			#{ govn_cert_no },
+			#{ company_no },
+			#{ party_name },
+			#{ cert_hld_date },
+			#{ cert_end_date },
+			#{ cust_type },
+			#{ cust_en_name },
+			#{ agent_cust_name },
+			#{ agent_paper_type },
+			#{ agent_paper_no },
+			#{ is_bas_cust },
+			#{ bssav_acc_no },
+			#{ bsopen_acc_no },
+			#{ bas_open_permit_no},
+			#{ acct_lic_no },
+			#{ open_acc_no },
+			#{ rm_team_no },
+			#{ cust_status },
+			#{ addr_type },
+			#{ post_cd },
+			#{ nation },
+			#{ province },
+			#{ city },
+			#{ country },
+			#{ addr_line },
+			#{ area_no },
+			#{ phone_no },
+			#{ ext_no },
+			#{ fax_no },
+			#{ mobile_no },
+			#{ email_addr },
+			#{ web_sit })
+	</insert>
+
+	<!-- 根据ID删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from cust_base_account where cust_id = #{ cust_id }
+	</delete>
+
+	<!-- 根据几个条件分页查询 -->
+	<select id="queryListByPage" resultType="java.util.HashMap" parameterType="Object">
+		select 
+		<include refid="Base_Column_List" />
+		from cust_base_account
+		<include refid="Example_Where_Clause" />
+		limit #{begin},#{pageSize}
+	</select>
+
+	<!-- 根据几个条件查询数目 -->
+	<select id="queryCountByPage" resultType="java.lang.Integer" parameterType="Object">
+		select count(*)  from cust_base_account
+		<include refid="Example_Where_Clause" />
+	</select>
+
+
+</mapper>   

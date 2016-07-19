@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.founder.hao.dao.IUserDao" >
+
+	<resultMap id="BaseResultMap" type="com.founder.hao.entity.User">
+		<id column="USER_ID" property="userId" />
+		<result column="USERNAME" property="username" />
+		<result column="PASSWORD" property="password" />
+		<result column="NAME" property="name" />
+		<result column="EMAIL" property="email" />
+		<result column="PHONE" property="phone" />
+		<result column="QQ" property="qq" />
+		<result column="STATUS" property="status" />
+	</resultMap>
+
+	<!-- sys_user table all fields -->
+	<sql id="Base_Column_List">
+		user_id,username,password,name,email,phone,qq,status
+	</sql>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<trim suffixOverrides=",">
+			<if test="bean != null and bean.userId != null and bean.userId != ''">
+				and USER_ID  like '%'||#{bean.userId} ||'%'
+			</if>
+			<if test="bean != null and bean.username != null and bean.username != ''">
+				and USERNAME like '%'||#{bean.username} ||'%'
+			</if>
+			<if test="bean != null and bean.name != null and bean.name != ''">
+				and NAME like '%'||#{bean.name} ||'%'
+			</if>
+			<if test="bean != null and bean.email != null and bean.email != ''">
+				and EMAIL like '%'||#{bean.email} ||'%'
+			</if>
+			<if test="bean != null and bean.phone != null and bean.phone != ''">
+				and PHONE like '%'||#{bean.phone} ||'%'
+			</if>
+		</trim>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insertUser" parameterType="com.founder.hao.entity.User" useGeneratedKeys="true" keyProperty="userId">
+		insert into
+		sys_user (USERNAME,PASSWORD,NAME,EMAIL,PHONE,QQ,STATUS) 
+		values (#{username},#{password},#{name},#{email},#{phone},#{qq},#{status})
+	</insert>
+
+	<!-- 根据ID修改记录 -->
+	<update id="updateUser" parameterType="com.founder.hao.entity.User">
+		update sys_user set 
+		<trim suffixOverrides=",">
+			<if test="username != null  and username != '' ">
+				USERNAME = #{username},
+			</if>
+			<if test="password != null  and password != '' ">
+				PASSWORD = #{password},
+			</if>
+			<if test="name != null ">
+				NAME = #{name},
+			</if>
+			<if test="email != null ">
+				EMAIL = #{email},
+			</if>
+			<if test="phone != null ">
+				PHONE = #{phone}
+			</if>
+			<if test="qq != null ">
+				QQ = #{qq},
+			</if>
+			<if test="status != null ">
+				STATUS = #{status}
+			</if>
+		</trim>
+		where USER_ID=#{userId}
+	</update>
+
+	<!-- 根据ID删除记录 -->
+	<delete id="deleteUser" parameterType="com.founder.hao.entity.User">
+		delete from sys_user where USER_ID = #{userId}
+	</delete>
+
+	<!-- 根据ID查询 -->
+	<select id="getUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user where USER_ID = #{userId}
+	</select>
+
+	<!-- 根据username查询 -->
+	<select id="getUserByUserName" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from sys_user where USERNAME = #{username}
+	</select>
+
+
+	<!-- 修改记录，只修改值不为空的字段 -->
+	<update id="updateBySelective" parameterType="com.founder.hao.entity.User">
+		update sys_user set
+		<trim suffixOverrides=",">
+			<if test="username != null  and username != '' ">
+				USERNAME = #{username},
+			</if>
+			<if test="password != null  and password != '' ">
+				PASSWORD = #{password},
+			</if>
+			<if test="name != null ">
+				NAME = #{name},
+			</if>
+			<if test="email != null ">
+				EMAIL = #{email},
+			</if>
+			<if test="phone != null ">
+				PHONE = #{phone}
+			</if>
+			<if test="qq != null ">
+				QQ = #{qq},
+			</if>
+			<if test="status != null ">
+				STATUS = #{status}
+			</if>
+		</trim>
+		where USER_ID=#{userId}
+	</update>
+
+	<!-- 根据几个条件分页查询 -->
+	<select id="queryListByPage" resultType="java.util.HashMap" parameterType="Object">
+		select 
+		<include refid="Base_Column_List" />
+		from sys_user
+		<include refid="Example_Where_Clause" />
+		limit #{begin},#{pageSize}
+	</select>
+
+	<!-- 根据几个条件查询数目 -->
+	<select id="queryCountByPage" resultType="java.lang.Integer" parameterType="Object">
+		select count(*)  from sys_user
+		<include refid="Example_Where_Clause" />
+	</select>
+
+</mapper>   
